@@ -6,7 +6,7 @@ from CTC import CTC
 from Wayside import Wayside
 from TrackModel import TrackModel
 from TrainModel import TrainModel
-# from TrainController import TrainController
+from TrainController import TrainController
 from Train import Train
 from Track import Track
 #from TrainModel import TrainModel
@@ -23,12 +23,17 @@ import random
 # - or do we have an addTrack function that can be called each time we reparse?
 track = TrackParser.parseTrack("TrackLayout.csv")
 
+
 ctcOffice = CTC(track)
 waysideController = Wayside(ctcOffice)
 trackModel = TrackModel(waysideController)
 trainModel = TrainModel(trackModel)
+trainController = TrainController(trainModel)
+
+#adding train controller to train model
+trainModel.addController(trainController)
 
 # propagate track model
 ctcOffice.propagateTrack()
-
 ctcOffice.dispatch(10, 50, 1, 'Green')
+
