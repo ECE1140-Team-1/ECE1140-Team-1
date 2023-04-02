@@ -12,7 +12,7 @@ class TrainModel(QObject):
     # signals to be sent
     trainPowertoTrainController = pyqtSignal(Train)
     actSpeedtoTrainController = pyqtSignal(Train)
-    
+    #   :)
     
     def __init__(self, trackModel):
         super().__init__()
