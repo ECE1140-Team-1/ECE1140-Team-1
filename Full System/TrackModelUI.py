@@ -1,15 +1,13 @@
 import sys, os
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6 import uic
-from PyQt6.QtCore import QSize
+from PyQt6.QtCore import QSize, pyqtSignal
 from BlockInfo import BlockInfo
 from FaultDisplay import FaultDisplay
 from Fault import Fault
 from Section import Section
 import TrackParser 
 from signals import signals
-
-sys.dont_write_bytecode = True
 
 # Main Window Class
 class TrackModelUI(QtWidgets.QMainWindow):
@@ -25,7 +23,6 @@ class TrackModelUI(QtWidgets.QMainWindow):
 
         # create section dictionary to hold sections
         self.sectionDict = {}
-        self.pageDict = {}
 
         # create items in scroll area based on track that was instantiated 
         self.createLineItem(self.sectionDict)
@@ -54,10 +51,21 @@ class TrackModelUI(QtWidgets.QMainWindow):
         self.RedBreakagesScroll.setWidget(self.RedFaultWidget)
         self.GreenBreakagesScroll.setWidget(self.GreenFaultWidget)
 
+        # connect temperature update
+        self.tempGo.clicked.connect(self.tempUpdate)
+
         # connect signals
         signals.trackModelUpdateGUIOccupancy.connect(self.updateOccupancy)
         signals.trackModelUpdateGUIVacancy.connect(self.updateVacancy)
         signals.timerTicked.connect(self.updateTime)
+
+        # test ui signals
+        signals.trackModelGUIOccupancyPressed.connect(self.updateOccupancy)
+        signals.trackModelGUIVacancyPressed.connect(self.updateVacancy)
+        signals.trackModelGUICrossingChanged.connect(self.changeCrossings)
+        signals.trackModelGUISwitchChanged.connect(self.changeSwitch)
+        signals.trackModelGUITempSignal.connect(self.tempUpdate)
+        signals.trackModelGUIFaultSignal.connect(self.updateFaults)
 
     def updateTime(self, hrs, mins, secs):
         self.time.setText(f'{int(hrs):02d}' + ':' + f'{int(mins):02d}' + ':' + f'{int(secs):02d}')
@@ -257,8 +265,6 @@ class TrackModelUI(QtWidgets.QMainWindow):
 
     def generateBlockInfoPage(self, section):
         self.blockInfo = BlockInfo(section)
-        if self.blockInfo.ID not in self.pageDict:
-            self.pageDict[self.blockInfo.ID] = self.blockInfo
 
         self.openBlockInfo()
 

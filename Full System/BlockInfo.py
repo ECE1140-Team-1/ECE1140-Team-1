@@ -97,3 +97,6 @@ class BlockInfo(QtWidgets.QMainWindow):
 
         self.widget.setLayout(self.vbox)
         self.MainScrollArea.setWidget(self.widget)
+
+    def updateOccupancy(self):
+        return

@@ -49,10 +49,20 @@ class Signals(QObject):
     trackModelUpdateOccupancy = pyqtSignal(Train, Line, int, bool) # trainID, line, blockNumber, 0 = not occupied, 1 = occupied
     trackModelUpdateCommandedSpeed = pyqtSignal(int, int) # trainID, commandedSpeed
     trackModelDispatchTrain = pyqtSignal(Train) # trainID, destinationBlock, commandedSpeed, authority, Line
+    # track model gui signals
     trackModelUpdateGUIOccupancy = pyqtSignal(str, str)
     trackModelUpdateGUIVacancy = pyqtSignal(str, str)
     trackModelUpdateGUICrossings = pyqtSignal(int)
     trackModelUpateGUISwitches = pyqtSignal()
+    # test ui signals
+    trackModelGUIOccupancyPressed = pyqtSignal(str, str) # line, block
+    trackModelGUIVacancyPressed = pyqtSignal(str, str) # line, block
+    trackModelGUICrossingChanged = pyqtSignal(int) # 1-4 representing the 4 states of crossings
+    trackModelGUISwitchChanged = pyqtSignal(str, str, str) # line, block, option 1 or 2
+    trackModelGUITempSignal = pyqtSignal(int) # temperature
+    trackModelGUIFaultSignal = pyqtSignal(str, str, str) # line, block, fault type
+    # block page signals
+    blockPageUpdateOccupancy = pyqtSignal() 
 
     # train model signals
     trainModelDispatchTrain = pyqtSignal(Train) # trainID, Line, destination, commandedSpeed, authority, route
@@ -83,7 +93,5 @@ class Signals(QObject):
     trainControllerKI = pyqtSignal(float)
     trainControllerUIKP = pyqtSignal(float)
     trainControllerUIKI = pyqtSignal(float)
-
-
 
 signals = Signals()
